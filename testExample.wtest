@@ -1,9 +1,16 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
+// 2) Tests de una venta (pensar las clases de equivalencia).
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+describe "test de la porota" {
+  const facu = new Comprador (medioDePago = debitoDeFacu)
+  const debitoDeFacu = new TarjetaDeDebito (saldoDisponible = 0)
+
+  test "Cuando vendo bajo el stock" {
+    const pepe = new Comprador (medioDePago = creditoDePepe)
+    const creditoDePepe = new TarjetaDeCredito()
+    laPorota.vender(10, pepe)
+    assert.equals(90, laPorota.stock())
   }
 
 }
