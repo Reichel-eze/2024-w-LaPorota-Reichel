@@ -3,14 +3,50 @@ import example.*
 // 2) Tests de una venta (pensar las clases de equivalencia).
 
 describe "test de la porota" {
-  const facu = new Comprador (medioDePago = debitoDeFacu)
   const debitoDeFacu = new TarjetaDeDebito (saldoDisponible = 0)
+  const facu = new Comprador (medioDePago = debitoDeFacu)
 
   test "Cuando vendo bajo el stock" {
-    const pepe = new Comprador (medioDePago = creditoDePepe)
-    const creditoDePepe = new TarjetaDeCredito()
+    const creditoDePepe = new TarjetaDeCredito()              // primero se crea el creditoDePepe
+    const pepe = new Comprador (medioDePago = creditoDePepe)  // luego creo a pepe con su respectivo medio de pago (RESPETAR ESTE ORDEN)
     laPorota.vender(10, pepe)
     assert.equals(90, laPorota.stock())
+  }
+
+  test "Cuando vendo se usa el medio de pago" {
+    assert.equals(1, 2)   // una forma de recordar que me falta programarlo!!
+  }
+
+  test "Cuando NO puedo vender me entero la razon" {
+    assert.throwsExceptionWithMessage("No hay saldo", { laPorota.vender(1,facu) })  // Por ej, no puedo vender porque facu (el comprador) NO tiene saldo disponible en su tarjeta de debito
+  }
+
+  test "Cuando no hay fondos, NO se descuenta el stock" {
+    assert.throwsException({laPorota.vender(1,facu)})   // chequea que sea una excepcion
+    assert.equals(100, laPorota.stock())
+  }
+
+  test "Cuando no puedo vender, el cliente no debe pagar"{
+    assert.throwsExceptionWithMessage("No hay stock suficiente", { laPorota.vender(101,facu) })
+  }
+}
+
+describe "Test de Medios de Pago" {
+  const creditoDeEze = new TarjetaDeCredito()              
+  const ezequiel = new Comprador (medioDePago = creditoDeEze)  
+  
+  const debitoDeMarce = new TarjetaDeDebito(saldoDisponible = 100)                 
+  const marcela = new Comprador (medioDePago = debitoDeMarce)  
+
+  test "Cuando se paga con credito, aumenta la deuda" {
+    laPorota.vender(10, ezequiel)
+    assert.that(creditoDeEze.deuda() > 0)
+    assert.equals(20, creditoDeEze.deuda())
+  }
+
+  test "Cuando se pago debito, reduce el saldo" {
+    laPorota.vender(10, marcela)
+    assert.equals(80, debitoDeMarce.saldoDisponible())
   }
 
 }

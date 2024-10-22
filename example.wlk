@@ -12,8 +12,9 @@ object laPorota {
   method precioPorGramo() = precioPorGramo  // para consultar el precio por gramo de la porota
 
   method vender(cantidadDeGramos, comprador){
+    if(cantidadDeGramos > stock) throw new DomainException(message="No hay stock suficiente")   // EXCEPCION!!!
+    comprador.pagar(cantidadDeGramos * precioPorGramo)    // RESPETAR ESTE ORDEN PARA LOS TEST (1ERO se lo mando al pagar, para ver si se produce una excepcion, si se produce NO pasaria al siguiente paso de actualizar el stock)
     stock = stock - cantidadDeGramos
-    comprador.pagar(cantidadDeGramos * precioPorGramo)
   }
 
 }
@@ -48,6 +49,7 @@ class TarjetaDeDebito {
   method saldoDisponible() = saldoDisponible  // para consultar el saldo disponible de la tarjeta de debito
 
   method pagar(monto){
+    if(saldoDisponible < monto) throw new DomainException(message="No hay saldo") // EXCEPCION!!!
     saldoDisponible = saldoDisponible - monto
   }
 }
