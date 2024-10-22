@@ -53,3 +53,7 @@ class TarjetaDeDebito {
     saldoDisponible = saldoDisponible - monto
   }
 }
+
+// Ejemplito 
+const debitoDeEze = new TarjetaDeDebito (saldoDisponible = 100)
+const ezequiel = new Comprador (medioDePago = debitoDeEze)
